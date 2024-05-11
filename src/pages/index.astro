@@ -3,31 +3,29 @@ import "@fontsource/inter";
 
 import { Counter, db, eq, sql } from "astro:db";
 
-// if (Astro.request.method === "POST") {
-// 	// parse form data
-// 	const formData = await Astro.request.formData();
-// 	const increment = formData.get("increment");
-// 	const decrement = formData.get("decrement");
+if (Astro.request.method === "POST") {
+	const formData = await Astro.request.formData();
+	const increment = formData.get("increment");
+	const decrement = formData.get("decrement");
 
-// 	// await db.insert(Counter).values({ name: "Joost Klein", likes: 0 });
+	await db.insert(Counter).values({ name: "Joost Klein", likes: 1 });
 
-// 	if (increment && typeof increment === "string") {
-// 		await db
-// 			.update(Counter)
-// 			.set({ likes: sql`${Counter.likes} + 1` })
-// 			.where(eq(Counter.name, "Joost Klein"));
-// 	}
-// 	if (decrement && typeof decrement === "string") {
-// 		await db
-// 			.update(Counter)
-// 			.set({ likes: sql`${Counter.likes} - 1` })
-// 			.where(eq(Counter.name, "Joost Klein"));
-// 	}
-// }
+	if (increment && typeof increment === "string") {
+		await db
+			.update(Counter)
+			.set({ likes: sql`${Counter.likes} + 1` })
+			.where(eq(Counter.name, "Joost Klein"));
+	}
+	if (decrement && typeof decrement === "string") {
+		await db
+			.update(Counter)
+			.set({ likes: sql`${Counter.likes} - 1` })
+			.where(eq(Counter.name, "Joost Klein"));
+	}
+}
 
 const counter = await db.select().from(Counter);
-let count: number = 0;
-if (counter[0]) count = parseInt(counter[0].likes.toLocaleString());
+count = counter[0].likes.toLocaleString();
 ---
 
 <html lang="en">
@@ -56,7 +54,7 @@ if (counter[0]) count = parseInt(counter[0].likes.toLocaleString());
 				>
 			</form>
 		</div>
-		<p class="text-xl mt-4">Counter: <span id="counter">{count}</span></p>
+		<p class="text-xl mt-4">Counter: <span id="counter">{}</span></p>
 	</body>
 
 	<style>

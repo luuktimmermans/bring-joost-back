@@ -1,13 +1,10 @@
 ---
-import { Counter, db, eq, sql } from "astro:db";
+import { sql, Counter, db, eq } from "astro:db";
 
 if (Astro.request.method === "POST") {
-	// parse form data
 	const formData = await Astro.request.formData();
 	const increment = formData.get("increment");
 	const decrement = formData.get("decrement");
-
-	// await db.insert(Counter).values({ name: "Joost Klein", likes: 0 });
 
 	if (increment && typeof increment === "string") {
 		await db
