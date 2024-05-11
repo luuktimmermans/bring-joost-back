@@ -1,6 +1,6 @@
 import tailwind from "@astrojs/tailwind";
-import { defineConfig } from "astro/config";
 import vercel from "@astrojs/vercel/serverless";
+import { defineConfig } from "astro/config";
 
 import db from "@astrojs/db";
 
@@ -8,5 +8,7 @@ import db from "@astrojs/db";
 export default defineConfig({
   output: "server",
   integrations: [tailwind(), db()],
-  adapter: vercel()
+	adapter: vercel({
+    webAnalytics: { enabled: true }
+  })
 });
