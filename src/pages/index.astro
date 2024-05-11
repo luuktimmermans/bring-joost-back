@@ -1,0 +1,75 @@
+---
+import "@fontsource/inter";
+
+const response = await fetch(new URL("/data/counter.json", Astro.url));
+const data = await response.json();
+let currentCount = data.count.toLocaleString("en");
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Bring Joost Back!</title>
+	</head>
+	<body class="bg-primary text-white grid h-dvh place-content-center antialiased text-center">
+		<h1 class="text-4xl font-bold">Bring Joost back:</h1>
+		<div class="flex flex-wrap justify-center gap-4 items-start mt-4">
+			<button
+				class="bg-white hover:bg-secondary flex transition-colors hover:text-white items-center gap-2 text-xl text-primary px-6 py-4 font-bold rounded-full"
+				id="increment"><span>Yes</span><span>❤️</span></button
+			>
+			<button
+				class="bg-white flex hover:bg-secondary transition-colors hover:text-white items-center gap-2 text-xl text-primary px-6 py-4 font-bold rounded-full"
+				id="decrement"><span>No</span><span>👎</span></button
+			>
+		</div>
+		<p class="text-xl mt-4">Counter: <span id="counter">{currentCount}</span></p>
+	</body>
+</html>
+
+<style>
+	body {
+		font-family: "Inter", sans-serif;
+	}
+</style>
+
+<script>
+	const counterElement = document.getElementById("counter");
+	const increaseBtn = document.getElementById("increment");
+	const decreaseBtn = document.getElementById("decrement");
+
+	// Increment function
+	increaseBtn?.addEventListener("click", async () => {
+		updateCount(1);
+	});
+
+	// Decrement function
+	decreaseBtn?.addEventListener("click", async () => {
+		updateCount(-1);
+	});
+
+	// A function to handle updating the counter
+	async function updateCount(change: any) {
+		const response = await fetch("/data/counter.json");
+		let data = await response.json();
+		data.count += change;
+
+		const updateResponse = await fetch("/api/updateCount", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ newCount: data.count }),
+		});
+
+		if (updateResponse.ok) {
+			const updateData = await updateResponse.json();
+			counterElement.textContent = updateData.count.toLocaleString("en");
+		} else {
+			console.error("Failed to update the count");
+		}
+	}
+</script>
