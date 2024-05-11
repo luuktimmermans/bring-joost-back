@@ -1,9 +1,9 @@
 ---
 import "@fontsource/inter";
 
-const response = await fetch(new URL("/data/counter.json", Astro.url));
-const data = await response.json();
-let currentCount = data.count.toLocaleString("en");
+// const response = await fetch(new URL("data/counter.json", Astro.url));
+// const data = await response.json();
+// let currentCount = data.count.toLocaleString("en");
 ---
 
 <html lang="en">
@@ -26,7 +26,7 @@ let currentCount = data.count.toLocaleString("en");
 				id="decrement"><span>No</span><span>👎</span></button
 			>
 		</div>
-		<p class="text-xl mt-4">Counter: <span id="counter">{currentCount}</span></p>
+		<p class="text-xl mt-4">Counter: <span id="counter">0</span></p>
 	</body>
 </html>
 
@@ -67,7 +67,7 @@ let currentCount = data.count.toLocaleString("en");
 
 		if (updateResponse.ok) {
 			const updateData = await updateResponse.json();
-			counterElement.textContent = updateData.count.toLocaleString("en");
+			if (counterElement) counterElement.textContent = updateData.count.toLocaleString("en");
 		} else {
 			console.error("Failed to update the count");
 		}
