@@ -8,7 +8,7 @@ import { Counter, db } from "astro:db";
 // 	const increment = formData.get("increment");
 // 	const decrement = formData.get("decrement");
 
-await db.insert(Counter).values({ name: "Joost Klein", likes: 1 });
+// await db.insert(Counter).values({ name: "Joost Klein", likes: 1 });
 
 // 	if (increment && typeof increment === "string") {
 // 		await db
@@ -76,20 +76,20 @@ const count = counter[0].likes.toLocaleString();
 	}
 
 	function no() {
-		formIncrement?.querySelector("button")?.classList.remove("bg-white");
+		formDecrement?.querySelector("button")?.classList.remove("bg-white");
 		formDecrement?.querySelector("button")?.classList.add("bg-secondary", "text-white");
 		formDecrement?.classList.add("pointer-events-none");
 		formIncrement?.classList.add("pointer-events-none", "opacity-50");
 	}
 
 	if (formIncrement)
-		formIncrement.addEventListener("submit", (event) => {
+		formIncrement.addEventListener("submit", () => {
 			localStorage.setItem("voted", "yes");
 			yes();
 		});
 
 	if (formDecrement)
-		formDecrement.addEventListener("submit", (event) => {
+		formDecrement.addEventListener("submit", () => {
 			localStorage.setItem("voted", "no");
 			no();
 		});
