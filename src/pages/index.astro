@@ -1,28 +1,28 @@
 ---
 import "@fontsource/inter";
 
-import { Counter, db, eq, sql } from "astro:db";
+import { Counter, db } from "astro:db";
 
-if (Astro.request.method === "POST") {
-	const formData = await Astro.request.formData();
-	const increment = formData.get("increment");
-	const decrement = formData.get("decrement");
+// if (Astro.request.method === "POST") {
+// 	const formData = await Astro.request.formData();
+// 	const increment = formData.get("increment");
+// 	const decrement = formData.get("decrement");
 
-	// await db.insert(Counter).values({ name: "Joost Klein", likes: 1 });
+await db.insert(Counter).values({ name: "Joost Klein", likes: 1 });
 
-	if (increment && typeof increment === "string") {
-		await db
-			.update(Counter)
-			.set({ likes: sql`${Counter.likes} + 1` })
-			.where(eq(Counter.name, "Joost Klein"));
-	}
-	if (decrement && typeof decrement === "string") {
-		await db
-			.update(Counter)
-			.set({ likes: sql`${Counter.likes} - 1` })
-			.where(eq(Counter.name, "Joost Klein"));
-	}
-}
+// 	if (increment && typeof increment === "string") {
+// 		await db
+// 			.update(Counter)
+// 			.set({ likes: sql`${Counter.likes} + 1` })
+// 			.where(eq(Counter.name, "Joost Klein"));
+// 	}
+// 	if (decrement && typeof decrement === "string") {
+// 		await db
+// 			.update(Counter)
+// 			.set({ likes: sql`${Counter.likes} - 1` })
+// 			.where(eq(Counter.name, "Joost Klein"));
+// 	}
+// }
 
 const counter = await db.select().from(Counter);
 const count = counter[0].likes.toLocaleString();
@@ -39,14 +39,14 @@ const count = counter[0].likes.toLocaleString();
 	<body class="bg-primary text-white grid h-dvh place-content-center antialiased text-center" id="body">
 		<h1 class="text-5xl font-bold">12 points for Joost Klein</h1>
 		<div class="flex flex-wrap justify-center gap-4 items-start mt-4">
-			<form method="POST" id="form-increment">
+			<form method="POST" hx-post="/count" hx-target="#counter" id="form-increment">
 				<input type="hidden" name="increment" value="increment" />
 				<button
 					class="bg-white hover:bg-secondary flex transition-colors hover:text-white items-center gap-2 text-xl text-primary px-6 py-4 font-bold rounded-full"
 					id="increment"><span>Yes</span><span>❤️</span></button
 				>
 			</form>
-			<form method="POST" id="form-decrement">
+			<form method="POST" hx-post="/count" hx-target="#counter" id="form-decrement">
 				<input type="hidden" name="decrement" value="decrement" />
 				<button
 					class="bg-white flex hover:bg-secondary transition-colors hover:text-white items-center gap-2 text-xl text-primary px-6 py-4 font-bold rounded-full"
@@ -77,7 +77,6 @@ const count = counter[0].likes.toLocaleString();
 
 	function no() {
 		formIncrement?.querySelector("button")?.classList.remove("bg-white");
-
 		formDecrement?.querySelector("button")?.classList.add("bg-secondary", "text-white");
 		formDecrement?.classList.add("pointer-events-none");
 		formIncrement?.classList.add("pointer-events-none", "opacity-50");
